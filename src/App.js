@@ -6,6 +6,7 @@ function App() {
   return (
     <div className="App">
       <div class="container">
+      <div class="card">
       <h1>Wiki Drug Search</h1>
       <div id="searchForm" class="input-field">
     <form>
@@ -22,6 +23,7 @@ function App() {
         </div>
       </div>
     </form>
+        </div>
   </div>
   <div id="output">
 
