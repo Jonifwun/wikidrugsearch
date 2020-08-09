@@ -5,20 +5,28 @@ import './App.css';
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div class="container">
+      <h1>Wiki Drug Search</h1>
+      <div id="searchForm" class="input-field">
+    <form>
+      <input id="searchTerm" class="materialize-textarea" name="search" placeholder="Search By Drug Name" autofocus></input>
+      <div class="row">
+        <div class="col s12 m4">
+          <button id="searchButt" class="btn waves-effect waves-light " type="submit" name="action"><i class="material-icons left">search</i>Submit</button>
+        </div>
+        <div class="col s12 m4">
+          <button id="clear" class="btn waves-effect waves-light "><i class="material-icons left">youtube_searched_for</i>Clear Search</button>
+        </div>
+        <div class="col s12 m4">
+          <button id="searchButt" class="btn waves-effect waves-light " type="submit" name="action"><i class="material-icons left">help_outline</i>Random</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div id="output">
+
+  </div>
+  </div>
     </div>
   );
 }
