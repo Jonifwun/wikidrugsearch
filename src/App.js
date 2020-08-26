@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import ResultDisplayCard from './Components/ResultDisplayCard.js'
 
 class App extends React.Component {
 
@@ -9,21 +10,17 @@ class App extends React.Component {
       // loading: false,
 
       drugSearchTerm: '',
-      searchResults: []
+      searchResults: [],
+      title: '',
+      imgsrc: '',
+      description: '',
+      extract: '',
+      pageID: ''
     }
-    // this.componentDidMount.bind(this)
+    
     this.changeDrugSearchTerm.bind(this)
     this.searchWiki.bind(this)
   }
-
-//   componentDidMount() {
-
-//     this.setState({
-//       searchResults: [],
-//       // loading: true
-//     })
-
-// }
 
   changeDrugSearchTerm = (event) => {
     event.preventDefault();
@@ -40,27 +37,38 @@ class App extends React.Component {
     this.setState({
       searchResults: []
     })
-    let url = "https://en.wikipedia.org/w/api.php"
-    console.log('hi')
-    const params = {
-      action: "query",
-      list: "search",
-      srsearch: this.state.drugSearchTerm,
-      format: "json"
-  }
+    let url = "https://en.wikipedia.org/api/rest_v1/page/summary/"
+    
+    const searchValue = this.state.drugSearchTerm
 
-  url = url + '?origin=*';
-  Object.keys(params).forEach((key) => {
-    url += "&" + key + "=" + params[key];
-  });
+    url += searchValue
+  
+
+  //   const params = {
+  //     action: "query",
+  //     list: "search",
+  //     srsearch: this.state.drugSearchTerm,
+  //     format: "json"
+  // }
+
+  // url = url + '?origin=*';
+  // Object.keys(params).forEach((key) => {
+  //   url += "&" + key + "=" + params[key];
+  // });
 
     fetch(url)
         .then(response => response.json())
         .then(data => {
             this.setState({
-               searchResults: data
+               title: data.title,
+               imgsrc: data.thumbnail.source,
+               description: data.description,
+               extract: data.extract,
+               pageID: data.pageid,
+               pageURL: `http://en.wikipedia.org/?curid=${data.pageid}`
             })
             console.log(data)
+            console.log(this.state)
         })
         
   }
@@ -92,7 +100,7 @@ class App extends React.Component {
           </div>
     </div>
     <div id="output">
-
+      <ResultDisplayCard data={this.state}/>
     </div>
     </div>
       </div>
