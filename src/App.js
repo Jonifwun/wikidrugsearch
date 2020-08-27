@@ -23,7 +23,7 @@ class App extends React.Component {
     
     this.changeDrugSearchTerm.bind(this)
     this.searchWiki.bind(this)
-    // this.resetState.bind(this)
+    this.resetState.bind(this)
   }
 
   changeDrugSearchTerm = (event) => {
@@ -35,17 +35,19 @@ class App extends React.Component {
     
   }
 
-  // resetState = () => {
-  //   this.setState({
-  //     title: '',
-  //     imgsrc: '',
-  //     description: '',
-  //     extract: '',
-  //     pageID: '',
-  //     pageURL: '',
-  //     searchSuccess: false
-  //   })
-  // }
+
+  resetState = () => {
+    this.setState({
+      searched: false,
+      title: '',
+      imgsrc: '',
+      description: '',
+      extract: '',
+      pageID: '',
+      pageURL: '',
+      searchSuccess: false
+    })
+  }
 
   searchWiki = (event) => {
     event.preventDefault();
@@ -75,14 +77,15 @@ class App extends React.Component {
               description.includes(desc)
             )
           })
-
-          if(!filtered.length){
+          console.log(filtered);
+          
+          if(filtered.length === 0){
+            console.log('hi')
+            this.resetState();
+            console.log(this.state)
             throw new Error('No Drugs Were Found With That Name')
           }
-          // if(!data.description.includes(desc)){
-          //   throw new Error()
-          // }
-
+        
             if(data.title !== "Not found."){
                 this.setState({
                   title: data.title,
@@ -93,8 +96,9 @@ class App extends React.Component {
                   pageURL: `http://en.wikipedia.org/?curid=${data.pageid}`,
                   searchSuccess: true
                 })
-            } else {
-              throw new Error('Search Error, no result found')
+            } else if(data.title === "Not found.") {      
+                
+                throw new Error('Search Error, no result found')
             }
 
           
