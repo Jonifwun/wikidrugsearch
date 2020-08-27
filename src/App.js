@@ -64,7 +64,16 @@ class App extends React.Component {
   
 
     fetch(url)
-        .then(response => response.json())
+        .then(response => {
+          if(response.ok){
+            return response.json()
+          } else {
+            console.log(response.status)
+            this.resetState()
+            return Promise.reject(`You have a ${response.status} error`)
+          }
+          
+        })
         .then(data => {
           
           console.log(data)
@@ -97,7 +106,7 @@ class App extends React.Component {
                   searchSuccess: true
                 })
             } else if(data.title === "Not found.") {      
-                
+                this.resetState();
                 throw new Error('Search Error, no result found')
             }
 
