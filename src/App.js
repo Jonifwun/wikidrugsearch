@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import ResultDisplayCard from './Components/ResultDisplayCard.js'
+import NoResultCard from './Components/NoResultCard.js'
 
 class App extends React.Component {
 
@@ -8,14 +9,15 @@ class App extends React.Component {
     super(props);
     this.state = {
       // loading: false,
-
+      searched: false,
       drugSearchTerm: '',
       searchResults: [],
       title: '',
       imgsrc: '',
       description: '',
       extract: '',
-      pageID: ''
+      pageID: '',
+      searchSuccess: true
     }
     
     this.changeDrugSearchTerm.bind(this)
@@ -35,7 +37,8 @@ class App extends React.Component {
     event.preventDefault();
 
     this.setState({
-      searchResults: []
+      searchResults: [],
+      searched: true
     })
     let url = "https://en.wikipedia.org/api/rest_v1/page/summary/"
     
@@ -65,12 +68,13 @@ class App extends React.Component {
                description: data.description,
                extract: data.extract,
                pageID: data.pageid,
-               pageURL: `http://en.wikipedia.org/?curid=${data.pageid}`
+               pageURL: `http://en.wikipedia.org/?curid=${data.pageid}`,
+               searchSuccess: true
             })
             console.log(data)
             console.log(this.state)
         })
-        
+       //FETCH _ TRY CATCH???? 
   }
 
   render(){
@@ -81,7 +85,7 @@ class App extends React.Component {
       <div className="App">
         <div className="container">
         <div className="card">
-        <h1>Wiki Drug Search</h1>
+        <h3>Wiki Drug Search</h3>
         <div id="searchForm" className="input-field">
       <form>    
         <input id="searchDrug" className="materialize-textarea" value={this.state.drugSearchTerm || ''} onChange={this.changeDrugSearchTerm} name="search" placeholder="Search By Drug Name" autoFocus></input>
@@ -99,9 +103,13 @@ class App extends React.Component {
       </form>
           </div>
     </div>
-    <div id="output">
+  
+      <div id="output">
       <ResultDisplayCard data={this.state}/>
+      <NoResultCard searchSuccess={this.state.searchSuccess} pageID={this.state.pageID}/>
     </div>
+  
+    
     </div>
       </div>
     );

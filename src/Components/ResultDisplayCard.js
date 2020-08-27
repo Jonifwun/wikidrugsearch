@@ -7,10 +7,13 @@ class ResultDisplayCard extends Component {
     // }
 
     render(){
+        if (this.props.data.searched === false){
+            return null
+        }
         const title = this.props.data.title
         return (
             <div className="card">
-                <h3>{title}</h3>
+                <h5>{title}</h5>
                 <img src={this.props.data.imgsrc} alt="Chemical Structure"></img>
                 <hr></hr>
             <p>{this.props.data.extract}</p>
