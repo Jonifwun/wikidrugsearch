@@ -17,11 +17,13 @@ class App extends React.Component {
       description: '',
       extract: '',
       pageID: '',
-      searchSuccess: true
+      searchSuccess: true,
+      synthesisURL: ''
     }
     
     this.changeDrugSearchTerm.bind(this)
     this.searchWiki.bind(this)
+    // this.resetState.bind(this)
   }
 
   changeDrugSearchTerm = (event) => {
@@ -32,6 +34,18 @@ class App extends React.Component {
     });
     
   }
+
+  // resetState = () => {
+  //   this.setState({
+  //     title: '',
+  //     imgsrc: '',
+  //     description: '',
+  //     extract: '',
+  //     pageID: '',
+  //     pageURL: '',
+  //     searchSuccess: false
+  //   })
+  // }
 
   searchWiki = (event) => {
     event.preventDefault();
@@ -47,35 +61,76 @@ class App extends React.Component {
     url += searchValue
   
 
-  //   const params = {
-  //     action: "query",
-  //     list: "search",
-  //     srsearch: this.state.drugSearchTerm,
-  //     format: "json"
-  // }
-
-  // url = url + '?origin=*';
-  // Object.keys(params).forEach((key) => {
-  //   url += "&" + key + "=" + params[key];
-  // });
-
     fetch(url)
         .then(response => response.json())
         .then(data => {
-            this.setState({
-               title: data.title,
-               imgsrc: data.thumbnail.source,
-               description: data.description,
-               extract: data.extract,
-               pageID: data.pageid,
-               pageURL: `http://en.wikipedia.org/?curid=${data.pageid}`,
-               searchSuccess: true
-            })
-            console.log(data)
-            console.log(this.state)
+          
+          console.log(data)
+          const description = data.description
+
+          const descriptions = ['chemical', 'medication', 'drug'];
+         
+          const filtered = descriptions.filter((desc) => {
+            return (
+              description.includes(desc)
+            )
+          })
+
+          if(!filtered.length){
+            throw new Error('No Drugs Were Found With That Name')
+          }
+          // if(!data.description.includes(desc)){
+          //   throw new Error()
+          // }
+
+            if(data.title !== "Not found."){
+                this.setState({
+                  title: data.title,
+                  imgsrc: data.thumbnail.source,
+                  description: data.description,
+                  extract: data.extract,
+                  pageID: data.pageid,
+                  pageURL: `http://en.wikipedia.org/?curid=${data.pageid}`,
+                  searchSuccess: true
+                })
+            } else {
+              throw new Error('Search Error, no result found')
+            }
+
+          
+            fetch(`https://en.wikipedia.org/api/rest_v1/page/media-list/${searchValue}`)
+              .then(response => response.json())
+              .then(data => {
+                
+                const synthesis = data.items.filter((item) => {
+                  let mediaDesc = ''
+                  if(item.caption){
+                    mediaDesc = item.caption.text
+                  } 
+                  return(
+                    mediaDesc.includes('synthesis') 
+                  )
+                })
+                console.log(synthesis)
+                if(synthesis.length){
+                  let synthesisURL = synthesis[0].srcset[0].src
+                  console.log(synthesisURL)
+                  this.setState({
+                    synthesisURL: synthesisURL
+                  })
+                }
+              })
+          
+        }).catch((err) => {
+          console.log(err)
+          this.setState({
+          searchSuccess: false,
+          // searched: false
+          })
         })
-       //FETCH _ TRY CATCH???? 
-  }
+          // this.resetState()
+      }
+  
 
   render(){
 
