@@ -52,7 +52,7 @@ class App extends React.Component {
 
     const description = data.description.toLowerCase()
 
-    const descriptions = ['chemical', 'medication', 'drug', 'antibiotic', 'enantiomers', 'inhibitor', 'racemic', 'painkiller'];
+    const descriptions = ['chemical', 'medication', 'drug', 'antibiotic', 'enantiomers', 'inhibitor', 'racemic', 'painkiller', 'stimulant'];
    
     const filtered = descriptions.filter((desc) => {
       return (
@@ -87,13 +87,11 @@ class App extends React.Component {
           
         })
         .then(data => { 
-   
+          console.log(data)
           const filtered = this.resultFilter(data)
             
           if(filtered.length === 0){
-            console.log('hi')
             this.resetState();
-            console.log(this.state)
             throw new Error('No Drugs Were Found With That Name')
           }
         
@@ -143,7 +141,35 @@ class App extends React.Component {
                 return fetch(`https://en.wikipedia.org/api/rest_v1/page/related/${searchValue}`)
                 .then(response => response.json())
                 .then(data => {
-                  console.log('related pages:', data)
+                  console.log('related pages:', data.pages)
+
+                  const relatedPages = data.pages
+
+
+
+                  // const filteredRelatedCompounds = relatedPages.map(function(page){
+                  //   if(page.description){
+                  //       const desc = page.description
+                  //     return desc.includes('chemical')
+                  //   } else{
+                  //     return ''
+                  //   }
+                    
+                  // })
+                  
+
+                  const filteredRelatedCompounds = relatedPages.filter((page) => {
+                    let desc;
+                    if(page.description){
+                      desc = page.description
+                    var value = desc.includes('chemical')
+                    }
+                    return value === true    
+                  })
+
+                  console.log(filteredRelatedCompounds)
+
+
                 })
               })
               
