@@ -11,6 +11,10 @@ h3{
   font-family: 'Montserrat';
 }
 
+body{
+  background-color: rgba(219, 225, 233, 0.795);
+}
+
 .card{
   padding: 1rem;
   

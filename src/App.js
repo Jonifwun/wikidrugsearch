@@ -1,7 +1,5 @@
-import React from 'react';
-import './App.css';
-import ResultDisplayCard from './Components/ResultDisplayCard.js'
-import NoResultCard from './Components/NoResultCard.js'
+import React from 'react'
+import Main from './Components/Main'
 
 class App extends React.Component {
 
@@ -68,18 +66,15 @@ class App extends React.Component {
           if(response.ok){
             return response.json()
           } else {
-            console.log(response.status)
             this.resetState()
             return Promise.reject(`You have a ${response.status} error`)
           }
           
         })
-        .then(data => {
-          
-          console.log(data)
-          const description = data.description
+        .then(data => { 
+          const description = data.description.toLowerCase()
 
-          const descriptions = ['chemical', 'medication', 'drug'];
+          const descriptions = ['chemical', 'medication', 'drug', 'antibiotic', 'enantiomers', 'inhibitor', 'racemic'];
          
           const filtered = descriptions.filter((desc) => {
             return (
@@ -96,9 +91,10 @@ class App extends React.Component {
           }
         
             if(data.title !== "Not found."){
+              console.log(data)
                 this.setState({
                   title: data.title,
-                  imgsrc: data.thumbnail.source,
+                  // imgsrc: data.thumbnail.source,
                   description: data.description,
                   extract: data.extract,
                   pageID: data.pageid,
@@ -110,11 +106,15 @@ class App extends React.Component {
                 throw new Error('Search Error, no result found')
             }
 
-          
-            fetch(`https://en.wikipedia.org/api/rest_v1/page/media-list/${searchValue}`)
+
+            //FETCH MEDIA ITEMS AND CHECK FOR SYNTHESIS
+            return fetch(`https://en.wikipedia.org/api/rest_v1/page/media-list/${searchValue}`)
               .then(response => response.json())
               .then(data => {
-                
+                console.log(data)
+                this.setState({
+                  imgsrc: data.items[0].srcset[0].src
+                })
                 const synthesis = data.items.filter((item) => {
                   let mediaDesc = ''
                   if(item.caption){
@@ -133,15 +133,14 @@ class App extends React.Component {
                   })
                 }
               })
+              
           
         }).catch((err) => {
           console.log(err)
           this.setState({
           searchSuccess: false,
-          // searched: false
           })
         })
-          // this.resetState()
       }
   
 
@@ -150,36 +149,12 @@ class App extends React.Component {
     // const text = this.state.loading ? "loading..." : null;
 
     return (
-      <div className="App">
-        <div className="container">
-        <div className="card">
-        <h3>Wiki Drug Search</h3>
-        <div id="searchForm" className="input-field">
-      <form>    
-        <input id="searchDrug" className="materialize-textarea" value={this.state.drugSearchTerm || ''} onChange={this.changeDrugSearchTerm} name="search" placeholder="Search By Drug Name" autoFocus></input>
-        <div className="row">
-          <div className="col s12 m4">
-            <button id="searchButt" className="btn waves-effect waves-light " onClick={this.searchWiki} type="submit" name="action"><i className="material-icons left">search</i>Submit</button>
-          </div>
-          <div className="col s12 m4">
-            <button id="clear" className="btn waves-effect waves-light "><i className="material-icons left">youtube_searched_for</i>Clear Search</button>
-          </div>
-          <div className="col s12 m4">
-            <button id="searchButt" className="btn waves-effect waves-light " type="submit" name="action"><i className="material-icons left">help_outline</i>Random</button>
-          </div>
-        </div>
-      </form>
-          </div>
-    </div>
-  
-      <div id="output">
-      <ResultDisplayCard data={this.state}/>
-      <NoResultCard searchSuccess={this.state.searchSuccess} pageID={this.state.pageID}/>
-    </div>
-  
-    
-    </div>
-      </div>
+      <Main 
+        data={this.state}
+        searchWiki={this.searchWiki}
+        changeDrugSearchTerm={this.changeDrugSearchTerm}
+        resetState={this.resetState}
+      />
     );
 }
 }
