@@ -22,6 +22,7 @@ class App extends React.Component {
     this.changeDrugSearchTerm.bind(this)
     this.searchWiki.bind(this)
     this.resetState.bind(this)
+    this.resultFilter.bind(this)
   }
 
   changeDrugSearchTerm = (event) => {
@@ -46,6 +47,20 @@ class App extends React.Component {
       searchSuccess: false
     })
   }
+
+  resultFilter = (data) => {
+
+    const description = data.description.toLowerCase()
+
+    const descriptions = ['chemical', 'medication', 'drug', 'antibiotic', 'enantiomers', 'inhibitor', 'racemic', 'painkiller'];
+   
+    const filtered = descriptions.filter((desc) => {
+      return (
+        description.includes(desc)
+      )
+    })
+      return filtered
+    }
 
   searchWiki = (event) => {
     event.preventDefault();
@@ -72,17 +87,9 @@ class App extends React.Component {
           
         })
         .then(data => { 
-          const description = data.description.toLowerCase()
-
-          const descriptions = ['chemical', 'medication', 'drug', 'antibiotic', 'enantiomers', 'inhibitor', 'racemic'];
-         
-          const filtered = descriptions.filter((desc) => {
-            return (
-              description.includes(desc)
-            )
-          })
-          console.log(filtered);
-          
+   
+          const filtered = this.resultFilter(data)
+            
           if(filtered.length === 0){
             console.log('hi')
             this.resetState();
@@ -94,7 +101,7 @@ class App extends React.Component {
               console.log(data)
                 this.setState({
                   title: data.title,
-                  // imgsrc: data.thumbnail.source,
+                  relatedMaterial: [],
                   description: data.description,
                   extract: data.extract,
                   pageID: data.pageid,
@@ -132,7 +139,14 @@ class App extends React.Component {
                     synthesisURL: synthesisURL
                   })
                 }
+                //ANOTHER FINAL FETCH TO OBTAIN RELATED PAGES
+                return fetch(`https://en.wikipedia.org/api/rest_v1/page/related/${searchValue}`)
+                .then(response => response.json())
+                .then(data => {
+                  console.log('related pages:', data)
+                })
               })
+              
               
           
         }).catch((err) => {
