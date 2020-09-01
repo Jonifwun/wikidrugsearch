@@ -16,7 +16,8 @@ class App extends React.Component {
       extract: '',
       pageID: '',
       searchSuccess: true,
-      synthesisURL: ''
+      synthesisURL: '',
+      relatedCompounds: []
     }
     
     this.changeDrugSearchTerm.bind(this)
@@ -47,6 +48,10 @@ class App extends React.Component {
       searchSuccess: false
     })
   }
+
+  // getRelatedImages = (relatedArray) {
+
+  // }
 
   resultFilter = (data) => {
 
@@ -87,7 +92,7 @@ class App extends React.Component {
           
         })
         .then(data => { 
-          console.log(data)
+
           const filtered = this.resultFilter(data)
             
           if(filtered.length === 0){
@@ -116,7 +121,7 @@ class App extends React.Component {
             return fetch(`https://en.wikipedia.org/api/rest_v1/page/media-list/${searchValue}`)
               .then(response => response.json())
               .then(data => {
-                console.log(data)
+               
                 this.setState({
                   imgsrc: data.items[0].srcset[0].src
                 })
@@ -141,34 +146,33 @@ class App extends React.Component {
                 return fetch(`https://en.wikipedia.org/api/rest_v1/page/related/${searchValue}`)
                 .then(response => response.json())
                 .then(data => {
-                  console.log('related pages:', data.pages)
+
 
                   const relatedPages = data.pages
-
-
-
-                  // const filteredRelatedCompounds = relatedPages.map(function(page){
-                  //   if(page.description){
-                  //       const desc = page.description
-                  //     return desc.includes('chemical')
-                  //   } else{
-                  //     return ''
-                  //   }
-                    
-                  // })
-                  
+                 
 
                   const filteredRelatedCompounds = relatedPages.filter((page) => {
                     let desc;
                     if(page.description){
+
+                      const descriptions = ['chemical', 'medication', 'antibiotic', 'enantiomers', 'inhibitor', 'racemic', 'painkiller', 'stimulant'];
                       desc = page.description
-                    var value = desc.includes('chemical')
+                      var value;
+                      for(let i = 0; i < descriptions.length; i++){
+                        if(desc.includes(descriptions[i])){
+                          value = true;
+                            break;
+                        } else {
+                          value = false
+                        }
+                      }
                     }
                     return value === true    
                   })
 
-                  console.log(filteredRelatedCompounds)
-
+                  this.setState({
+                    relatedCompounds: filteredRelatedCompounds
+                  })
 
                 })
               })

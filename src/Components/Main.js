@@ -2,6 +2,7 @@ import React, { Component} from 'react'
 import '../App.css';
 import ResultDisplayCard from './ResultDisplayCard.js'
 import NoResultCard from './NoResultCard.js'
+import RelatedCompounds from './RelatedCompounds'
 
 class Main extends Component{
 
@@ -33,6 +34,7 @@ class Main extends Component{
     <div id="output">
       <ResultDisplayCard data={this.props.data}/>
       <NoResultCard searchSuccess={this.props.data.searchSuccess} pageID={this.props.data.pageID}/>
+      <RelatedCompounds relatedCompounds={this.props.data.relatedCompounds} data={this.props.data} getRelatedImages={this.props.getRelatedImages}/>
     </div>
 
 
