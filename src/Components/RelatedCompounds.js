@@ -10,12 +10,9 @@ class RelatedCompounds extends React.Component{
     //     }
     // }
     render(){
-        // let items;
-        // let link;
-
-            //THE LOOP IS GOING FASTER THAN THE FETCH, NEED TO WAIT FOR THE PROMISE TO BE FULFILLED
 
             if(this.props.relatedCompounds.length){
+                console.log(this.props.relatedCompounds)
             
            let items = this.props.relatedCompounds.map((compound) => {           
                 return <RelatedDisplayCard key={compound.pageid} data={compound}/>

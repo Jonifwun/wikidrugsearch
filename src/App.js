@@ -45,6 +45,7 @@ class App extends React.Component {
       extract: '',
       pageID: '',
       pageURL: '',
+      synthesisURL: '',
       searchSuccess: false
     })
   }
@@ -92,7 +93,7 @@ class App extends React.Component {
           
         })
         .then(data => { 
-
+          console.log(data)
           const filtered = this.resultFilter(data)
             
           if(filtered.length === 0){
@@ -174,10 +175,25 @@ class App extends React.Component {
                     relatedCompounds: filteredRelatedCompounds
                   })
 
+
+                   // HTML FETCH
+
+                        return fetch(`https://en.wikipedia.org/api/rest_v1/page/html/${searchValue}`)
+                        .then(response => response.text())
+                        .then(htmldata => {
+                          console.log(htmldata)
+                          //CONTAINS ALL THE HTML FROM THE PAGE.
+                          
+                          //WHAT ABOUT GETTING THE CHEM SPIDER LINK - View On ChemSpider button?
+
+                        })
+          //HTML FETCH END
+
                 })
+
               })
               
-              
+         
           
         }).catch((err) => {
           console.log(err)
