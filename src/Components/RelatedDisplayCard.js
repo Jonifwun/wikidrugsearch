@@ -4,13 +4,16 @@ class RelatedDisplayCard extends Component {
     constructor(props){
         super(props);
         this.state = {
-            imageURL: ''
+            imageURL: '',
+            chemSpiderLink: ''
         }
     }    
 
     componentDidMount(){
 
-        fetch(`https://en.wikipedia.org/api/rest_v1/page/media-list/${this.props.data.title}`)
+        const {title} = this.props.data
+
+        fetch(`https://en.wikipedia.org/api/rest_v1/page/media-list/${title}`)
             .then(response => response.json())
             .then(data => {
                                  
@@ -19,10 +22,33 @@ class RelatedDisplayCard extends Component {
                     imageURL: url
             })
              
-         }).catch((err) => {
-             console.log(err)
-         })  
-    }    
+         return fetch(`https://en.wikipedia.org/api/rest_v1/page/html/${title}`)
+         .then(response => response.text())
+         .then(htmldata => {
+           //CONTAINS ALL THE HTML FROM THE PAGE.
+           var parser = new DOMParser();
+           var doc = parser.parseFromString(htmldata, "text/html");
+
+           
+           //WHAT ABOUT GETTING THE CHEM SPIDER LINK - View On ChemSpider button?
+           const links = doc.querySelectorAll('a')
+           let chemspiderurl;
+           links.forEach(function(link){
+             let attribute = link.getAttribute('href')
+             if(attribute.includes('chemspider')){
+               
+              chemspiderurl = attribute
+               
+             }
+           })
+           this.setState({
+             chemSpiderLink: chemspiderurl
+           }) 
+    })
+    }).catch((err) => {
+        console.log(err)
+}
+)}    
 
     
     render(){
@@ -37,7 +63,18 @@ class RelatedDisplayCard extends Component {
                 
                 <hr></hr>
             <p className="extract">{extract}</p>
-            <a href={pageURL}>See full article</a>
+            <div className="links">
+                    <div className="container">
+                        <a href={pageURL} className="btn link">See full article</a>
+                    </div>
+                    { this.state.chemSpiderLink ? 
+                        <div className="container">
+                            <a href={this.state.chemSpiderLink} className="btn link" id="chemSpy">Go to ChemSpider</a>
+                        </div>
+                        : null
+                    }
+                    
+                </div>
             </div>
         )
     }

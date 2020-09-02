@@ -36,6 +36,21 @@ body{
   
 }
 
+.link{
+  width: 90%;
+  
+}
+
+#chemSpy{
+  background-color: rgba(68, 121, 236, 0.829);
+}
+
+.links{
+  display: flex;
+  justify-content: center;
+  align-content: space-around;
+}
+
 .extract{
   text-align: justify;
 }

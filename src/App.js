@@ -17,7 +17,8 @@ class App extends React.Component {
       pageID: '',
       searchSuccess: true,
       synthesisURL: '',
-      relatedCompounds: []
+      relatedCompounds: [],
+      chemSpiderLink: ''
     }
     
     this.changeDrugSearchTerm.bind(this)
@@ -46,7 +47,8 @@ class App extends React.Component {
       pageID: '',
       pageURL: '',
       synthesisURL: '',
-      searchSuccess: false
+      searchSuccess: false,
+      chemSpiderLink: ''
     })
   }
 
@@ -176,16 +178,29 @@ class App extends React.Component {
                   })
 
 
-                   // HTML FETCH
-
                         return fetch(`https://en.wikipedia.org/api/rest_v1/page/html/${searchValue}`)
                         .then(response => response.text())
                         .then(htmldata => {
-                          console.log(htmldata)
                           //CONTAINS ALL THE HTML FROM THE PAGE.
+                          var parser = new DOMParser();
+                          var doc = parser.parseFromString(htmldata, "text/html");
+
                           
                           //WHAT ABOUT GETTING THE CHEM SPIDER LINK - View On ChemSpider button?
-
+                          const links = doc.querySelectorAll('a')
+                          let chemspiderurl;
+                          links.forEach(function(link){
+                            let attribute = link.getAttribute('href')
+                            if(attribute.includes('chemspider')){
+                              
+                             chemspiderurl = attribute
+                              
+                            }
+                          })
+                          this.setState({
+                            chemSpiderLink: chemspiderurl
+                          })
+                          
                         })
           //HTML FETCH END
 
