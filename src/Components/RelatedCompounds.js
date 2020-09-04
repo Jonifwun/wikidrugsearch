@@ -2,17 +2,10 @@ import React from 'react'
 import RelatedDisplayCard from './RelatedDisplayCard'
 
 class RelatedCompounds extends React.Component{
-    // constructor(props){
-    //     super(props)
-    //     this.state = {
-    //         items: [],
-    //         isDoneLoading: false
-    //     }
-    // }
+
     render(){
 
             if(this.props.relatedCompounds.length){
-                console.log(this.props.relatedCompounds)
             
            let items = this.props.relatedCompounds.map((compound) => {           
                 return <RelatedDisplayCard key={compound.pageid} data={compound}/>

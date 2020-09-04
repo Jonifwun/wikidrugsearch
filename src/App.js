@@ -72,7 +72,7 @@ class App extends React.Component {
 
   searchWiki = (event) => {
     event.preventDefault();
-
+    this.resetState()
     this.setState({
       searchResults: [],
       searched: true

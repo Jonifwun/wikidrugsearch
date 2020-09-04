@@ -1,17 +1,96 @@
 import React, { Component } from 'react';
+import DataDisplay from './DataDisplay'
 
 class RelatedDisplayCard extends Component {
     constructor(props){
         super(props);
         this.state = {
+            doc: '',
+            tableItemsObject: {},
             imageURL: '',
-            chemSpiderLink: ''
+            chemSpiderLink: '',
+            CASNumber: '',
+            StdInChI: '',
+            IUPACname: '',
+            IUPHARligand: '',
+            chemSpiderID: ''
         }
-    }    
+        this.getChemSpiderURL.bind(this)
+        this.getData.bind(this)
+        this.getChemSpiderData.bind(this)
+    }
+    
+    getChemSpiderURL(){
+
+        const links = this.state.doc.querySelectorAll('a')
+
+        let chemspiderurl;
+        
+        links.forEach(function(link){
+          let attribute = link.getAttribute('href')
+          if(attribute.includes('chemspider')){
+            chemspiderurl = attribute
+            }
+        })
+
+        this.setState({
+
+         chemSpiderLink: chemspiderurl,
+         
+        })
+
+    }
+
+    getData(){
+        const data = this.state.tableItemsObject.parts[0].template.params
+        
+        //If these values don't exist, need to remove.
+
+        //FOCUS ON JUST ADDING THEM TO THE DAMN UI FIRST
+      
+        let CASNumber  = data.CAS_number.wt ? data.CAS_number.wt : '';
+        let StdInChI = data.StdInChI.wt ? data.StdInChI.wt : '';
+        let IUPACname = data.IUPAC_name.wt ? data.IUPAC_name.wt : '';
+        let IUPHARligand = data.IUPHAR_ligand.wt ? data.IUPHAR_ligand.wt : '';
+        let chemSpiderID = data.ChemSpiderID.wt ? data.ChemSpiderID.wt : '';
+
+        this.setState({
+            CASNumber,
+            StdInChI,
+            IUPACname,
+            IUPHARligand,
+            chemSpiderID
+    })
+}
+
+    getChemSpiderData(){
+          //    var chemurl = new URL("https://api.rsc.org/compounds/v1/records/5541/details"),
+        //     params = { fields: [{
+        //         "CommonName": "dexamethasone"
+        //     }] }
+        //     Object.keys(params).forEach(key => chemurl.searchParams.append(key, params[key]))
+        // const options = {
+        //     method: "POST",
+        //     headers: {
+        //       "apikey": "ubG2bhMljAJqbEN6BpyYFqGnvjcJCGzF",  
+        //       "Accept": "application/json",
+        //       "Content-Type": "application/json",
+        //     },
+        //     mode: 'no-cors',
+        //     body: JSON.stringify({
+        //       "name": "dexamethasone"
+        //     }),
+        //   };
+        //    return fetch("https://api.rsc.org/compounds/v1/filter/name", options)
+        //    .then(response => response.text())
+        //    .then(data => {
+        //        console.log('ChemSpy:', data)
+        //    })
+    }
 
     componentDidMount(){
 
-        const {title} = this.props.data
+        const { title } = this.props.data
 
         fetch(`https://en.wikipedia.org/api/rest_v1/page/media-list/${title}`)
             .then(response => response.json())
@@ -20,56 +99,74 @@ class RelatedDisplayCard extends Component {
                 let url = data.items[0].srcset[0].src
                 this.setState({
                     imageURL: url
+
             })
              
          return fetch(`https://en.wikipedia.org/api/rest_v1/page/html/${title}`)
          .then(response => response.text())
          .then(htmldata => {
-           //CONTAINS ALL THE HTML FROM THE PAGE.
-           var parser = new DOMParser();
-           var doc = parser.parseFromString(htmldata, "text/html");
-
            
-           //WHAT ABOUT GETTING THE CHEM SPIDER LINK - View On ChemSpider button?
-           const links = doc.querySelectorAll('a')
-           let chemspiderurl;
-           links.forEach(function(link){
-             let attribute = link.getAttribute('href')
-             if(attribute.includes('chemspider')){
-               
-              chemspiderurl = attribute
-               
-             }
-           })
-           this.setState({
-             chemSpiderLink: chemspiderurl
-           }) 
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(htmldata, "text/html");
+
+                   
+            const dataTable = doc.querySelector('table')
+            const tableItems = dataTable.getAttribute('data-mw')
+            
+            const tableItemsObject = JSON.parse(tableItems)
+            console.log(tableItemsObject)
+            
+            this.setState({
+                doc: doc,
+                tableItemsObject: tableItemsObject, 
+            })
+
+            this.getChemSpiderURL()
+            this.getData()
+         })        
+        }).catch((err) => {
+            console.log(err)
     })
-    }).catch((err) => {
-        console.log(err)
-}
-)}    
+
+}    
 
     
     render(){
+
+
         const { title, extract, pageid} = this.props.data
+        const { imageURL,chemSpiderLink } = this.state
         let pageURL = `http://en.wikipedia.org/?curid=${pageid}`
         
         return (
             <div className="card">
-                <h5>{title}</h5>
 
-                {this.state.imageURL ? <img className="structure" src={this.state.imageURL} alt="Chemical Structure"></img> : null}
+                <h5>{ title }</h5>
+                <div className="container">
+                    <div className="row">
+                        {/* <div className="col md-6"> */}
+                            { imageURL ? <img className="structure" src={ imageURL } alt="Chemical Structure"></img> : null }
+                        {/* </div> */}
+                        {/* <div className="col md-6">
+                            {<DataDisplay />}
+                        </div> */}
+                    </div>
+
+                </div>
+                {<DataDisplay data={this.state}/>}
+         
+
                 
+
                 <hr></hr>
-            <p className="extract">{extract}</p>
+            <p className="extract">{ extract }</p>
             <div className="links">
                     <div className="container">
-                        <a href={pageURL} className="btn link">See full article</a>
+                        <a href={ pageURL } className="btn link">See full article</a>
                     </div>
-                    { this.state.chemSpiderLink ? 
+                    { chemSpiderLink ? 
                         <div className="container">
-                            <a href={this.state.chemSpiderLink} className="btn link" id="chemSpy">Go to ChemSpider</a>
+                            <a href={ chemSpiderLink } target="_blank" rel="noopener noreferrer" className="btn link" id="chemSpy">Go to ChemSpider</a>
                         </div>
                         : null
                     }

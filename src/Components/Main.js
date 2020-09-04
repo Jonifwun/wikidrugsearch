@@ -1,4 +1,4 @@
-import React, { Component} from 'react'
+import React, { Component } from 'react'
 import '../App.css';
 import ResultDisplayCard from './ResultDisplayCard.js'
 import NoResultCard from './NoResultCard.js'

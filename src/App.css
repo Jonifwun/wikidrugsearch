@@ -24,6 +24,13 @@ body{
   width: 30%;
 }
 
+#dataDisplay{
+  padding: 2px 20px;
+  text-align: left;
+  font-size: 12px;
+}
+
+
 #relatedTitle{
   background-color: #26a69a;
   color: #fff;
@@ -31,9 +38,11 @@ body{
 
 
 .card{
-  padding: 1rem;
-  
-  
+  padding: 1rem; 
+}
+
+.bold{
+  font-weight: bold !important;
 }
 
 .link{
@@ -43,6 +52,12 @@ body{
 
 #chemSpy{
   background-color: rgba(68, 121, 236, 0.829);
+}
+
+.data{
+  display: flex;
+  justify-content: center;
+  align-content: space-between;
 }
 
 .links{
