@@ -42,24 +42,21 @@ class RelatedDisplayCard extends Component {
     }
 
     getData(){
-        const data = this.state.tableItemsObject.parts[0].template.params
-        
-        //If these values don't exist, need to remove.
 
-        //FOCUS ON JUST ADDING THEM TO THE DAMN UI FIRST
+        const data = this.state.tableItemsObject.parts[0].template.params
+        console.log(data)
+    
       
         let CASNumber  = data.CAS_number.wt ? data.CAS_number.wt : '';
         let StdInChI = data.StdInChI.wt ? data.StdInChI.wt : '';
         let IUPACname = data.IUPAC_name.wt ? data.IUPAC_name.wt : '';
-        let IUPHARligand = data.IUPHAR_ligand.wt ? data.IUPHAR_ligand.wt : '';
-        let chemSpiderID = data.ChemSpiderID.wt ? data.ChemSpiderID.wt : '';
+        // let chemSpiderID = data.ChemSpiderID.wt ? data.ChemSpiderID.wt : '';
 
         this.setState({
             CASNumber,
             StdInChI,
             IUPACname,
-            IUPHARligand,
-            chemSpiderID
+            // chemSpiderID
     })
 }
 
@@ -90,9 +87,11 @@ class RelatedDisplayCard extends Component {
 
     componentDidMount(){
 
-        const { title } = this.props.data
+       
 
-        fetch(`https://en.wikipedia.org/api/rest_v1/page/media-list/${title}`)
+        let { title } = this.props.data
+
+        fetch(`https://en.wikipedia.org/api/rest_v1/page/media-list/${ title }`)
             .then(response => response.json())
             .then(data => {
                                  
@@ -110,12 +109,12 @@ class RelatedDisplayCard extends Component {
             const doc = parser.parseFromString(htmldata, "text/html");
 
                    
-            const dataTable = doc.querySelector('table')
+            const dataTable = doc.querySelector('.infobox')
+
             const tableItems = dataTable.getAttribute('data-mw')
             
             const tableItemsObject = JSON.parse(tableItems)
-            console.log(tableItemsObject)
-            
+             
             this.setState({
                 doc: doc,
                 tableItemsObject: tableItemsObject, 
@@ -133,44 +132,37 @@ class RelatedDisplayCard extends Component {
     
     render(){
 
+        const { title, extract, pageid } = this.props.data
 
-        const { title, extract, pageid} = this.props.data
         const { imageURL,chemSpiderLink } = this.state
-        let pageURL = `http://en.wikipedia.org/?curid=${pageid}`
+
+        let pageURL = `http://en.wikipedia.org/?curid=${pageid}`        
         
         return (
             <div className="card">
 
-                <h5>{ title }</h5>
+                <h5>{ title.replaceAll('_', ' ') }</h5>
                 <div className="container">
                     <div className="row">
-                        {/* <div className="col md-6"> */}
-                            { imageURL ? <img className="structure" src={ imageURL } alt="Chemical Structure"></img> : null }
-                        {/* </div> */}
-                        {/* <div className="col md-6">
-                            {<DataDisplay />}
-                        </div> */}
+                        { imageURL ? <img className="structure" src={ imageURL } alt="Chemical Structure"></img> : null }
                     </div>
-
                 </div>
                 {<DataDisplay data={this.state}/>}
-         
-
-                
 
                 <hr></hr>
-            <p className="extract">{ extract }</p>
-            <div className="links">
+
+                <p className="extract">{ extract }</p>
+                <div className="links">
                     <div className="container">
                         <a href={ pageURL } className="btn link">See full article</a>
                     </div>
-                    { chemSpiderLink ? 
-                        <div className="container">
-                            <a href={ chemSpiderLink } target="_blank" rel="noopener noreferrer" className="btn link" id="chemSpy">Go to ChemSpider</a>
-                        </div>
+                        { chemSpiderLink ? 
+                            <div className="container">
+                                <a href={ chemSpiderLink } target="_blank" rel="noopener noreferrer" className="btn link" id="chemSpy">Go to ChemSpider</a>
+                            </div>
                         : null
                     }
-                    
+                        
                 </div>
             </div>
         )
