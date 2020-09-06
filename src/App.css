@@ -42,6 +42,11 @@ body{
   padding: 0 !important;
 }
 
+#synthesisBtn{
+  background-color: #282c34;
+  width: 225px;
+}
+
 
 
 .card{

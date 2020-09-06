@@ -31,12 +31,7 @@ class ResultDisplayCard extends Component {
                 <div>
 
                     <img className="structure" src={ imgsrc } alt="Chemical Structure"></img>
-                    { synthesisURL ? 
-                        <button className="btn" onClick={this.handleClick}> 
-                            { this.state.synthesisDisplay ? "Hide Synthesis": "Display Synthesis"}
-                        </button> 
-                    : null 
-                    }
+                    
                     { this.state.synthesisDisplay ? 
                         <div className="card synthesisCard">
                             <div id="synthesisTitle">
@@ -55,6 +50,12 @@ class ResultDisplayCard extends Component {
                     <div className="container">
                         <a href={ pageURL } className="btn link">See full article</a>
                     </div>
+                    { synthesisURL ? 
+                        <div className="container"><button className="btn" id="synthesisBtn" onClick={ this.handleClick }> 
+                            { this.state.synthesisDisplay ? "Hide Synthesis": "Display Synthesis"}
+                        </button></div> 
+                    : null 
+                    }
                     <div className="container">
                         <a href={ chemSpiderLink } target="_blank" rel="noopener noreferrer" className="btn link" id="chemSpy">Go to ChemSpider</a>
                     </div>
