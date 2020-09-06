@@ -31,10 +31,17 @@ body{
 }
 
 
-#relatedTitle{
+#relatedTitle, #synthesisTitle{
   background-color: #26a69a;
   color: #fff;
+  padding: 0;
+  width: 100%;
 }
+
+.synthesisCard{
+  padding: 0 !important;
+}
+
 
 
 .card{

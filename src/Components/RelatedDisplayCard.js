@@ -15,9 +15,9 @@ class RelatedDisplayCard extends Component {
             IUPHARligand: '',
             chemSpiderID: ''
         }
-        this.getChemSpiderURL.bind(this)
-        this.getData.bind(this)
-        this.getChemSpiderData.bind(this)
+        this.getChemSpiderURL = this.getChemSpiderURL.bind(this)
+        this.getData = this.getData.bind(this)
+        // this.getChemSpiderData = this.getChemSpiderData.bind(this)
     }
     
     getChemSpiderURL(){

@@ -21,10 +21,10 @@ class App extends React.Component {
       chemSpiderLink: ''
     }
     
-    this.changeDrugSearchTerm.bind(this)
-    this.searchWiki.bind(this)
-    this.resetState.bind(this)
-    this.resultFilter.bind(this)
+    this.changeDrugSearchTerm = this.changeDrugSearchTerm.bind(this)
+    this.searchWiki = this.searchWiki.bind(this)
+    this.resetState = this.resetState.bind(this)
+    this.resultFilter = this.resultFilter.bind(this)
   }
 
   changeDrugSearchTerm = (event) => {

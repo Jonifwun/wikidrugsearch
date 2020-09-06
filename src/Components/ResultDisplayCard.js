@@ -1,6 +1,22 @@
 import React, { Component } from 'react';
 
 class ResultDisplayCard extends Component {
+
+    constructor(props){
+        super(props)
+        this.state= {
+            synthesisDisplay: false
+        }
+        this.handleClick = this.handleClick.bind(this)
+    }
+
+    handleClick = (event) => {
+        event.preventDefault()
+        this.setState((prevState) => ({
+            synthesisDisplay: !prevState.synthesisDisplay
+        }))
+
+    }
     
     render(){
         const { title, imgsrc, extract, pageURL, searched, synthesisURL, chemSpiderLink } = this.props.data
@@ -8,16 +24,28 @@ class ResultDisplayCard extends Component {
         if (searched === false){
             return null
         }
-        
+
         return (
             <div className="card">
                 <h5>{ title }</h5>
                 <div>
 
                     <img className="structure" src={ imgsrc } alt="Chemical Structure"></img>
-
-                    { synthesisURL ? <img className="structure" src={ synthesisURL } alt={`${ title } synthesis`}></img> : null }
-
+                    { synthesisURL ? 
+                        <button className="btn" onClick={this.handleClick}> 
+                            { this.state.synthesisDisplay ? "Hide Synthesis": "Display Synthesis"}
+                        </button> 
+                    : null 
+                    }
+                    { this.state.synthesisDisplay ? 
+                        <div className="card synthesisCard">
+                            <div id="synthesisTitle">
+                                <h5>Synthesis:</h5>
+                            </div>
+                            <img src={ synthesisURL } alt={`${ title } synthesis`}></img>
+                        </div> 
+                    : null 
+                    }
                 </div>
 
                 
