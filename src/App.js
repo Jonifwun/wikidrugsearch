@@ -6,7 +6,6 @@ class App extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      // loading: false,
       searched: false,
       drugSearchTerm: '',
       searchResults: [],
@@ -36,7 +35,6 @@ class App extends React.Component {
     
   }
 
-
   resetState = () => {
     this.setState({
       searched: false,
@@ -52,9 +50,6 @@ class App extends React.Component {
     })
   }
 
-  // getRelatedImages = (relatedArray) {
-
-  // }
 
   resultFilter = (data) => {
 
@@ -119,7 +114,6 @@ class App extends React.Component {
                 throw new Error('Search Error, no result found')
             }
 
-
             //FETCH MEDIA ITEMS AND CHECK FOR SYNTHESIS
             return fetch(`https://en.wikipedia.org/api/rest_v1/page/media-list/${searchValue}`)
               .then(response => response.json())
@@ -137,10 +131,9 @@ class App extends React.Component {
                     mediaDesc.includes('synthesis') 
                   )
                 })
-                console.log(synthesis)
+            
                 if(synthesis.length){
                   let synthesisURL = synthesis[0].srcset[0].src
-                  console.log(synthesisURL)
                   this.setState({
                     synthesisURL: synthesisURL
                   })
@@ -185,8 +178,6 @@ class App extends React.Component {
                           var parser = new DOMParser();
                           var doc = parser.parseFromString(htmldata, "text/html");
 
-                          
-                          //WHAT ABOUT GETTING THE CHEM SPIDER LINK - View On ChemSpider button?
                           const links = doc.querySelectorAll('a')
                           let chemspiderurl;
                           links.forEach(function(link){
@@ -202,7 +193,6 @@ class App extends React.Component {
                           })
                           
                         })
-          //HTML FETCH END
 
                 })
 
@@ -225,10 +215,10 @@ class App extends React.Component {
 
     return (
       <Main 
-        data={this.state}
-        searchWiki={this.searchWiki}
-        changeDrugSearchTerm={this.changeDrugSearchTerm}
-        resetState={this.resetState}
+        data={ this.state }
+        searchWiki={ this.searchWiki }
+        changeDrugSearchTerm={ this.changeDrugSearchTerm }
+        resetState={ this.resetState }
       />
     );
 }

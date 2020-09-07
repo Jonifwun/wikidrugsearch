@@ -3,7 +3,9 @@ import React, { Component } from 'react'
 class DataDisplay extends Component {
 
     render(){
+
         const { CASNumber, StdInChI, IUPACname } = this.props.data
+        
         if(this.props.data.CASNumber){
             return(
                 <div className="card" id="dataDisplay">

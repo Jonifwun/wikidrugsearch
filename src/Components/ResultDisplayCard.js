@@ -13,7 +13,9 @@ class ResultDisplayCard extends Component {
     handleClick = (event) => {
         event.preventDefault()
         this.setState((prevState) => ({
+
             synthesisDisplay: !prevState.synthesisDisplay
+
         }))
 
     }
@@ -32,7 +34,7 @@ class ResultDisplayCard extends Component {
 
                     <img className="structure" src={ imgsrc } alt="Chemical Structure"></img>
                     
-                    { this.state.synthesisDisplay ? 
+                    { this.state.synthesisDisplay && synthesisURL ? 
                         <div className="card synthesisCard">
                             <div id="synthesisTitle">
                                 <h5>Synthesis:</h5>
