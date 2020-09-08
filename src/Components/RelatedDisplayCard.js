@@ -50,6 +50,7 @@ class RelatedDisplayCard extends Component {
         let CASNumber  = data.CAS_number.wt ? data.CAS_number.wt : '';
         let StdInChI = data.StdInChI.wt ? data.StdInChI.wt : '';
         let IUPACname = data.IUPAC_name.wt ? data.IUPAC_name.wt : '';
+        IUPACname = IUPACname.replaceAll(/<[^>]*>?/gm, '')
         // let chemSpiderID = data.ChemSpiderID.wt ? data.ChemSpiderID.wt : '';
 
         this.setState({
