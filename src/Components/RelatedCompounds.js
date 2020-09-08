@@ -8,7 +8,7 @@ class RelatedCompounds extends React.Component{
             if(this.props.relatedCompounds.length){
             
            let items = this.props.relatedCompounds.map((compound) => {           
-                return <RelatedDisplayCard key={compound.pageid} data={compound}/>
+                return <RelatedDisplayCard key={ compound.pageid } data={ compound }/>
             })
 
             return(
@@ -18,7 +18,7 @@ class RelatedCompounds extends React.Component{
                         <div className="card" id="relatedTitle">
                             <h5>Related Compounds:</h5>
                         </div>
-                            {items}
+                            { items }
                     </div>
                 </div>
             )

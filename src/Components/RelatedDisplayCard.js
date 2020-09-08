@@ -90,6 +90,7 @@ class RelatedDisplayCard extends Component {
        
 
         let { title } = this.props.data
+       
 
         fetch(`https://en.wikipedia.org/api/rest_v1/page/media-list/${ title }`)
             .then(response => response.json())
