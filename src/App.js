@@ -27,7 +27,6 @@ class App extends React.Component {
     this.setState({
       drugSearchTerm: event.target.value
     });
-    
   }
 
   resetState = () => {
