@@ -29,6 +29,12 @@ class App extends React.Component {
     });
   }
 
+  clearDrugSearchTerm = (event) => {
+    this.setState({
+      drugSearchTerm: ''
+    })
+  }
+
   resetState = () => {
     this.setState({
       searched: false,
@@ -44,11 +50,9 @@ class App extends React.Component {
     })
   }
 
-
   resultFilter = (data) => {
 
     const description = data.description.toLowerCase()
-
     const descriptions = ['chemical', 'medication', 'drug', 'antibiotic', 'enantiomers', 'inhibitor', 'racemic', 'painkiller', 'stimulant'];
    
     const filtered = descriptions.filter((desc) => {
@@ -66,13 +70,12 @@ class App extends React.Component {
       searchResults: [],
       searched: true
     })
-    let url = "https://en.wikipedia.org/api/rest_v1/page/summary/"
     
+    let url = "https://en.wikipedia.org/api/rest_v1/page/summary/"
     const searchValue = this.state.drugSearchTerm
 
     url += searchValue
   
-
     fetch(url)
         .then(response => {
           if(response.ok){
@@ -81,7 +84,6 @@ class App extends React.Component {
             this.resetState()
             return Promise.reject(`You have a ${response.status} error`)
           }
-          
         })
         .then(data => { 
           console.log(data)
@@ -125,7 +127,7 @@ class App extends React.Component {
                     mediaDesc.includes('synthesis') 
                   )
                 })
-            
+
                 if(synthesis.length){
                   let synthesisURL = synthesis[0].srcset[0].src
                   this.setState({
@@ -136,15 +138,10 @@ class App extends React.Component {
                 return fetch(`https://en.wikipedia.org/api/rest_v1/page/related/${searchValue}`)
                 .then(response => response.json())
                 .then(data => {
-
-
                   const relatedPages = data.pages
-                 
-
-                  const filteredRelatedCompounds = relatedPages.filter((page) => {
+                    const filteredRelatedCompounds = relatedPages.filter((page) => {
                     let desc;
                     if(page.description){
-
                       const descriptions = ['chemical', 'medication', 'antibiotic', 'enantiomers', 'inhibitor', 'racemic', 'painkiller', 'stimulant'];
                       desc = page.description
                       var value;
@@ -159,41 +156,29 @@ class App extends React.Component {
                     }
                     return value === true    
                   })
-
                   this.setState({
                     relatedCompounds: filteredRelatedCompounds
                   })
-
-
-                        return fetch(`https://en.wikipedia.org/api/rest_v1/page/html/${searchValue}`)
-                        .then(response => response.text())
-                        .then(htmldata => {
-                          //CONTAINS ALL THE HTML FROM THE PAGE.
-                          var parser = new DOMParser();
-                          var doc = parser.parseFromString(htmldata, "text/html");
-
-                          const links = doc.querySelectorAll('a')
-                          let chemspiderurl;
-                          links.forEach(function(link){
-                            let attribute = link.getAttribute('href')
-                            if(attribute.includes('chemspider')){
-                              
-                             chemspiderurl = attribute
-                              
-                            }
-                          })
-                          this.setState({
-                            chemSpiderLink: chemspiderurl
-                          })
-                          
-                        })
-
+                  return fetch(`https://en.wikipedia.org/api/rest_v1/page/html/${searchValue}`)
+                  .then(response => response.text())
+                  .then(htmldata => {
+                    //CONTAINS ALL THE HTML FROM THE PAGE.
+                    var parser = new DOMParser();
+                    var doc = parser.parseFromString(htmldata, "text/html");
+                    const links = doc.querySelectorAll('a')
+                    let chemspiderurl;
+                    links.forEach(function(link){
+                      let attribute = link.getAttribute('href')
+                      if(attribute.includes('chemspider')){                              
+                       chemspiderurl = attribute
+                      }
+                    })
+                    this.setState({
+                      chemSpiderLink: chemspiderurl
+                    })                        
+                  })
                 })
-
-              })
-              
-         
-          
+              })          
         }).catch((err) => {
           console.log(err)
           this.setState({
@@ -213,6 +198,7 @@ class App extends React.Component {
         searchWiki={ this.searchWiki }
         changeDrugSearchTerm={ this.changeDrugSearchTerm }
         resetState={ this.resetState }
+        clearDrugSearchTerm={ this.clearDrugSearchTerm }
       />
     );
 }

@@ -14,7 +14,7 @@ class Main extends Component{
       <div className="App">
         <div className="container">
           <div className="card">
-            <h3>Wiki Drug Search</h3>
+            <h3>ChemDrugSearcher</h3>
               <div id="searchForm" className="input-field">
                 <form>    
                   <input id="searchDrug" className="materialize-textarea" 
@@ -29,7 +29,7 @@ class Main extends Component{
                       </button>
                     </div>
                     <div className="col s12 m6">
-                      <button id="clear" className="btn waves-effect waves-light ">
+                      <button id="clear" className="btn waves-effect waves-light" onClick={ this.props.clearDrugSearchTerm }>
                         <i className="material-icons left">youtube_searched_for</i>Clear Search
                       </button>
                     </div>
