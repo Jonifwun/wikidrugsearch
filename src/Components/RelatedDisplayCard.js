@@ -109,14 +109,10 @@ class RelatedDisplayCard extends Component {
            
             const parser = new DOMParser();
             const doc = parser.parseFromString(htmldata, "text/html");
-
-                   
             const dataTable = doc.querySelector('.infobox')
-
             const tableItems = dataTable.getAttribute('data-mw')
-            
-            const tableItemsObject = JSON.parse(tableItems)
-             
+            const tableItemsObject = JSON.parse(tableItems)        
+
             this.setState({
                 doc: doc,
                 tableItemsObject: tableItemsObject, 
@@ -135,14 +131,11 @@ class RelatedDisplayCard extends Component {
     render(){
 
         const { title, extract, pageid } = this.props.data
-
         const { imageURL,chemSpiderLink } = this.state
-
         let pageURL = `http://en.wikipedia.org/?curid=${pageid}`        
         
         return (
             <div className="card">
-
                 <h5>{ title.replaceAll('_', ' ') }</h5>
                 <div className="container">
                     <div className="row">
@@ -163,7 +156,7 @@ class RelatedDisplayCard extends Component {
                                 <a href={ chemSpiderLink } target="_blank" rel="noopener noreferrer" className="btn link" id="chemSpy">Go to ChemSpider</a>
                             </div>
                         : null
-                    }
+                        }
                         
                 </div>
             </div>
