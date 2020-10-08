@@ -23,19 +23,14 @@ class Main extends Component{
                     name="search" placeholder="Search By Drug Name" autoFocus>
                   </input>
                   <div className="row">
-                    <div className="col s12 m4">
+                    <div className="col s12 m6">
                       <button id="searchButt" className="btn waves-effect waves-light " onClick={ this.props.searchWiki } type="submit" name="action">
                         <i className="material-icons left">search</i>Submit
                       </button>
                     </div>
-                    <div className="col s12 m4">
+                    <div className="col s12 m6">
                       <button id="clear" className="btn waves-effect waves-light ">
                         <i className="material-icons left">youtube_searched_for</i>Clear Search
-                      </button>
-                    </div>
-                    <div className="col s12 m4">
-                      <button id="searchButt" className="btn waves-effect waves-light " type="submit" name="action">
-                        <i className="material-icons left">help_outline</i>Random
                       </button>
                     </div>
                   </div>

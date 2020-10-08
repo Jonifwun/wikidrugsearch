@@ -20,7 +20,7 @@ class RelatedDisplayCard extends Component {
         // this.getChemSpiderData = this.getChemSpiderData.bind(this)
     }
     
-    getChemSpiderURL(){
+    getChemSpiderURL = () => {
 
         const links = this.state.doc.querySelectorAll('a')
 
@@ -41,7 +41,7 @@ class RelatedDisplayCard extends Component {
 
     }
 
-    getData(){
+    getData = () => {
 
         const data = this.state.tableItemsObject.parts[0].template.params
         console.log(data)
@@ -61,7 +61,7 @@ class RelatedDisplayCard extends Component {
     })
 }
 
-    getChemSpiderData(){
+    getChemSpiderData = () => {
           //    var chemurl = new URL("https://api.rsc.org/compounds/v1/records/5541/details"),
         //     params = { fields: [{
         //         "CommonName": "dexamethasone"

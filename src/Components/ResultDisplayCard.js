@@ -13,8 +13,6 @@ class ResultDisplayCard extends Component {
             doc: '',
             tableItemsObject: {}
         }
-        this.handleClick = this.handleClick.bind(this)
-        this.getData = this.getData.bind(this)
     }
 
     handleClick = (event) => {
@@ -27,7 +25,7 @@ class ResultDisplayCard extends Component {
 
     }
 
-    getData(){
+    getData = () => {
 
         const data = this.state.tableItemsObject.parts[0].template.params
         console.log(data)
@@ -36,7 +34,7 @@ class ResultDisplayCard extends Component {
         let CASNumber  = data.CAS_number.wt ? data.CAS_number.wt : '';
         let StdInChI = data.StdInChI.wt ? data.StdInChI.wt : '';
         let IUPACname = data.IUPAC_name.wt ? data.IUPAC_name.wt : '';
-        IUPACname = IUPACname.replace(/<[^>]*>?/gm, '')
+        IUPACname = IUPACname.replaceAll(/<[^>]*>?/gm, '')
        
 
         this.setState({
