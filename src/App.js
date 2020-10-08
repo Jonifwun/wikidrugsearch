@@ -20,7 +20,7 @@ class App extends React.Component {
       chemSpiderLink: ''
     }
   }
-
+  
   changeDrugSearchTerm = (event) => {
     event.preventDefault();
 
